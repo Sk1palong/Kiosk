@@ -1,5 +1,5 @@
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 //        키오스크 앱 작동
 //        메인 메뉴판 표시->해당 카테고리 메뉴판 표시 -> 장바구니에 추가 확인
 //        ->메인 메뉴판으로 이동 ->반복 후  ->Order 메뉴 선택 or Cancel 메뉴 선택

@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class Order {
     private List<Product> orderList = new ArrayList<>();
+    int cnt = 0;
 
     public void addOrder(Product product) {
         Scanner sc = new Scanner(System.in);
@@ -31,4 +32,32 @@ public class Order {
         return totalprice;
     }
 
+    public void completeOrder() throws InterruptedException {
+        orderList.clear();
+        cnt++;
+        System.out.println("주문이 완료되었습니다!");
+        System.out.println("대기번호는 [ " + cnt + " ] 번 입니다.");
+        System.out.println("(3초후 메뉴판으로 돌아갑니다.)");
+        System.out.println("3");
+        Thread.sleep(1000);
+        System.out.println("2");
+        Thread.sleep(1000);
+        System.out.println("1");
+        Thread.sleep(1000);
+    }
+
+    public void cancelOrder() throws InterruptedException {
+        orderList.clear();
+        System.out.println("진행하던 주문이 취소되었습니다. 이전 화면으로 돌아갑니다.");
+        Thread.sleep(1000);
+    }
+    public void failCancelOrder() throws InterruptedException {
+        System.out.println("주문이 취소되지 않았습니다. 이전 화면으로 돌아갑니다.");
+        Thread.sleep(1000);
+    }
+    public void blankOrderList() throws InterruptedException {
+        System.out.println("주문하신 내용이 없습니다.");
+        System.out.println("(초기 메뉴판으로 돌아갑니다.)");
+        Thread.sleep(1000);
+    }
 }

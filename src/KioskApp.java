@@ -10,6 +10,95 @@ public class KioskApp {
     private List<Product> categoryProduct = new ArrayList<>();
 
 
+
+
+    public void start() throws InterruptedException {
+        while (true) {
+            shopping();
+        }
+    }
+    public void shopping() throws InterruptedException {
+//        메인메뉴판 시작
+        int idx = 1;
+        int input;
+        Scanner sc = new Scanner(System.in);
+        System.out.println("\"SHAKESHACK BURGER 에 오신 걸 환영합니다.\"");
+        System.out.println("아래 메뉴판을 보시고 메뉴를 골라 입력해주세요.");
+        System.out.println("[ SHAKESHACK MENU ]");
+        for (Menu m : categoryMenu) {
+            System.out.print(idx + ". ");
+            m.information();
+            idx++;
+        }
+        System.out.println("[ ORDER MENU ]");
+        System.out.printf(idx + ". %-15s | %s\n", "Order", "장바구니를 확인 후 주문을 완료합니다.");
+        idx++;
+        System.out.printf(idx + ". %-15s | %s\n", "Cancel", "진행중인 주문을 취소합니다.");
+        input = sc.nextInt();
+//        메인메뉴판 끝
+
+        if (0 < input && input <= idx - 2) {
+//            상세메뉴판 시작
+            int categoryIdx = 1;
+            categoryProduct.clear();
+            System.out.println("\"SHAKESHACK BURGER 에 오신걸 환영합니다.\"");
+            System.out.println("아래 상품메뉴판을 보시고 상품을 골라 입력해주세요.");
+            String selectedCategory = categoryMenu.get(input - 1).getMenuName();
+            System.out.println("[ " + selectedCategory + " MENU ]");
+            for (Product p : allProduct) {
+                if (selectedCategory.equals(p.getCategory())) {
+                    categoryProduct.add(p);
+                    System.out.print(categoryIdx + ". ");
+                    p.information();
+                    categoryIdx++;
+                }
+            }
+            int select = sc.nextInt()-1;
+            order.addOrder(categoryProduct.get(select));
+//            상세메뉴판 끝
+        } else if (input == idx - 1) {
+//            주문 기능 시작
+            if(order.getOrderList()!=0) {
+                int confirmOrder = sc.nextInt();
+                if (confirmOrder == 1) {
+                    order.completeOrder();
+                }
+            }
+            else {
+                order.blankOrderList();
+            }
+//            주문 기능 끝
+        } else if (input == idx) {
+//            캔슬 기능 시작
+            System.out.println("진행하던 주문을 취소하겠습니까?");
+            System.out.println("1. 확인     2. 취소");
+            int cancelInput = sc.nextInt();
+            if (cancelInput == 1) {
+                order.cancelOrder();
+            }
+            if (cancelInput == 2) {
+                order.failCancelOrder();
+            }
+        }
+//        캔슬 기능 끝
+    }
+    public void showCategory(){
+        int idx = 1;
+        int input;
+        Scanner sc = new Scanner(System.in);
+        System.out.println("\"SHAKESHACK BURGER 에 오신 걸 환영합니다.\"");
+        System.out.println("아래 메뉴판을 보시고 메뉴를 골라 입력해주세요.");
+        System.out.println("[ SHAKESHACK MENU ]");
+        for (Menu m : categoryMenu) {
+            System.out.print(idx + ". ");
+            m.information();
+            idx++;
+        }
+        System.out.println("[ ORDER MENU ]");
+        System.out.printf(idx + ". %-15s | %s\n", "Order", "장바구니를 확인 후 주문을 완료합니다.");
+        idx++;
+        System.out.printf(idx + ". %-15s | %s\n", "Cancel", "진행중인 주문을 취소합니다.");
+    }
     public void loadMenu() {
         Menu[] menu = {
                 new Menu("Burgers", "앵거스 비프 통살을 다져만든 버거"),
@@ -47,75 +136,6 @@ public class KioskApp {
         };
         categoryMenu.addAll(Arrays.asList(menu));
         allProduct.addAll(Arrays.asList(products));
-
     }
-
-    public void start() {
-        int mainNum;
-        int categoryNum;
-        int productNum;
-        while(true) {
-            showMainMenu();
-            categoryNum = mainResponse();
-            productNum = showCategoryMenu(categoryNum);
-            categoryResponse(productNum,categoryProduct);
-
-        }
-    }
-
-    public void showMainMenu() {
-        int idx = 1;
-        System.out.println("\"SHAKESHACK BURGER 에 오신 걸 환영합니다.\"");
-        System.out.println("아래 메뉴판을 보시고 메뉴를 골라 입력해주세요.");
-        System.out.println("[ SHAKESHACK MENU ]");
-        for (Menu m : categoryMenu) {
-            System.out.print(idx + ". ");
-            m.information();
-            idx++;
-        }
-        System.out.println("[ ORDER MENU ]");
-        System.out.printf(idx + ". %-15s | %s\n", "Order", "장바구니를 확인 후 주문을 완료합니다.");
-        idx++;
-        System.out.printf(idx + ". %-15s | %s\n", "Cancel", "진행중인 주문을 취소합니다.");
-
-
-    }
-
-    public int showCategoryMenu(int categoryNum) {
-        int idx = 1;
-        categoryProduct.clear();
-        System.out.println("\"SHAKESHACK BURGER 에 오신걸 환영합니다.\"");
-        System.out.println("아래 상품메뉴판을 보시고 상품을 골라 입력해주세요.");
-        String selectedCategory = categoryMenu.get(categoryNum - 1).getMenuName();
-        System.out.println("[ " + selectedCategory + " MENU ]");
-        for (Product p : allProduct) {
-            if (selectedCategory.equals(p.getCategory())) {
-                categoryProduct.add(p);
-                System.out.print(idx + ". ");
-                p.information();
-                idx++;
-            }
-        }
-        return idx;
-    }
-
-    public int mainResponse() {
-        Scanner sc = new Scanner(System.in);
-        int input = sc.nextInt();
-        if (0 < input && input <= categoryMenu.size()) {
-            System.out.println(input+"번 카테고리 선택.");
-        }
-        return input;
-    }
-
-    public void categoryResponse(int idx,List<Product> list) {
-        Scanner sc = new Scanner(System.in);
-        int input = sc.nextInt();
-        if (0 < input && input < idx) {
-//            categoryProduct.get(input-1).information();
-            order.addOrder(list.get(input-1));
-        }
-
-    }
-
 }
+
