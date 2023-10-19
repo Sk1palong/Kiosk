@@ -105,7 +105,7 @@ public class KioskApp {
         Thread.sleep(1000);
     }
 
-    public static void wrongInput() throws InterruptedException { //범위내 입력
+    public static void wrongInput() throws InterruptedException { //범위 밖 입력
         System.out.println("잘못된 입력입니다.");
         System.out.println("메인 화면으로 돌아갑니다.");
         countDown();
@@ -121,7 +121,7 @@ public class KioskApp {
         Product[] products = {
                 new Product("ShackBurger", "토마토, 양상추, 쉑소스가 토핑된 치즈버거", 6.9, "Burgers", 10.9),
                 new Product("SmokeShack", "베이컨, 체리 페퍼에 쉑소스가 토핑된 치즈버거", 8.9, "Burgers", 12.9),
-                new Product("\'Shroom Burger", "몬스터 치즈와 체다 치즈와 버섯패티를 넣은 베지테리안 버거", 9.4, "Burgers"),
+                new Product("'Shroom Burger", "몬스터 치즈와 체다 치즈와 버섯패티를 넣은 베지테리안 버거", 9.4, "Burgers"),
                 new Product("Cheeseburger", "포테이토 번과 비프패티, 치즈가 토핑된 치즈버거", 6.9, "Burgers", 10.9),
                 new Product("Hamburger", "비프패티를 기본으로 취향따라 토핑을 선택하는 버거", 5.4, "Burgers", 9.0),
 
