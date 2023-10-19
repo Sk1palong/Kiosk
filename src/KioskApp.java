@@ -2,9 +2,9 @@ import java.util.*;
 
 public class KioskApp {
     private Order order = new Order();
-    private List<Menu> categoryMenu = new ArrayList<>();
-    private List<Product> allProduct = new ArrayList<>();
-    private List<Product> categoryProduct = new ArrayList<>();
+    private List<Menu> categoryMenu = new ArrayList<>(); //상위 메뉴
+    private List<Product> allProduct = new ArrayList<>(); // 모든 상품
+    private List<Product> categoryProduct = new ArrayList<>(); //카테고리별 상품List
 
 
     public void start() throws InterruptedException {
@@ -14,7 +14,7 @@ public class KioskApp {
     }
 
     public void shopping() throws InterruptedException {
-//        메인메뉴판 시작
+//        메인 메뉴판 시작
         int idx = 1;
         int input;
         Scanner sc = new Scanner(System.in);
@@ -31,10 +31,9 @@ public class KioskApp {
         idx++;
         System.out.printf(idx + ". %-15s | %s\n", "Cancel", "진행중인 주문을 취소합니다.");
         input = sc.nextInt();
-//        메인메뉴판 끝
 
         if (0 < input && input <= idx - 2) {
-//            상세메뉴판 시작
+//            상세 메뉴판 시작
             int categoryIdx = 1;
             categoryProduct.clear();
             System.out.println("\"SHAKESHACK BURGER 에 오신걸 환영합니다.\"");
@@ -49,55 +48,55 @@ public class KioskApp {
                     categoryIdx++;
                 }
             }
-            int select = sc.nextInt() - 1;
-            order.addOrder(categoryProduct.get(select));
-//            상세메뉴판 끝
+            int select = sc.nextInt();
+            if (0 < select && select < categoryIdx) {
+                order.addShoppingBag(categoryProduct.get(select - 1)); //장바구니 담기
+            } else {
+                wrongInput();
+            }
+
         } else if (input == idx - 1) {
-//            주문 기능 시작
+//            주문 시작
             order.startOrder();
-//            주문 기능 끝
+
         } else if (input == idx) {
 //            캔슬 기능 시작
-            System.out.println("진행하던 주문을 취소하겠습니까?");
-            System.out.println("1. 확인     2. 취소");
-            int cancelInput = sc.nextInt();
-            if (cancelInput == 1) {
-                order.cancelOrder();
-            }
-            if (cancelInput == 2) {
-                order.failCancelOrder();
-            }
-        }
-//        캔슬 기능 끝
+            order.cancelOrder();
 
 //        히든 기능
-        if (input == 0) {
-            idx = 1;
+        } else if (input == 0) {
+            double totalIncome = Math.round(order.getIncome() * 100) / 100.0;
             if (order.getIncome() != 0) {
                 System.out.println("[ 총 판매 금액 현황 ]");
-                System.out.println("현재까지 총 판매된 금액은 [ W " + order.getIncome() + " ] 입니다.\n");
+                System.out.println("현재까지 총 판매된 금액은 [ W " + totalIncome + " ] 입니다.\n");
 
                 System.out.println("[ 총 판매상품 목록 현황 ]");
                 System.out.println("현재까지 총 판매된 상품 목록은 아래와 같습니다.");
                 for (Product hs : order.getSoldList()) {
-                    System.out.print(idx + ". ");
-                    System.out.printf("%-20s | W %s\n\n", hs.getMenuName(), hs.getPrice());
+                    System.out.printf("- %-20s | W %s\n", hs.getMenuName(), hs.getPrice());
                 }
-                System.out.println("1. 돌아가기 ");
+                System.out.println("\n1. 돌아가기 ");
+
                 int goBack = sc.nextInt();
-                if(goBack == 1){
-                    System.out.println("이전 화면으로 돌아갑니다.");
+                if (goBack == 1) {
+                    System.out.println("메인 화면으로 돌아갑니다.");
                     countDown();
+                } else {
+                    wrongInput();
                 }
+
             } else {
                 System.out.println("판매 내역이 없습니다.");
-                System.out.println("이전 화면으로 돌아갑니다.");
+                System.out.println("메인 화면으로 돌아갑니다.");
                 countDown();
             }
+
+        } else {
+            wrongInput();
         }
     }
 
-    public static void countDown() throws InterruptedException {
+    public static void countDown() throws InterruptedException { //카운트 다운
         System.out.println("3");
         Thread.sleep(1000);
         System.out.println("2");
@@ -106,7 +105,13 @@ public class KioskApp {
         Thread.sleep(1000);
     }
 
-    public void loadMenu() {
+    public static void wrongInput() throws InterruptedException { //범위내 입력
+        System.out.println("잘못된 입력입니다.");
+        System.out.println("메인 화면으로 돌아갑니다.");
+        countDown();
+    }
+
+    public void loadMenu() { //메뉴 정보 저장
         Menu[] menu = {
                 new Menu("Burgers", "앵거스 비프 통살을 다져 만든 포테이토 번 버거"),
                 new Menu("Frozen Custard", "매장에서 신선하게 만드는 부드럽고 쫀득한 아이스크림"),
