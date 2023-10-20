@@ -3,7 +3,7 @@ import java.util.*;
 public class Order {
     private List<Product> orderList = new ArrayList<>(); //장바구니
     private HashSet<Product> soldList = new HashSet<>(); //판매목록
-    int cnt = 0; //주문 순서(대기번호)
+    private int cnt = 0; //주문 순서(대기번호)
     private double income; // 총 수입
 
     public void addShoppingBag(Product product) throws InterruptedException { //장바구니 담기
