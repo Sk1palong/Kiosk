@@ -11,9 +11,8 @@ public class Product extends Menu {
         this.category = category;
     }
     public Product(String menuName, String description, double price, String category, double optionPrice) {
-        super(menuName, description);
-        this.price = price;
-        this.category = category;
+//        super(menuName, description);
+        this(menuName, description, price, category);
         this.optionPrice = optionPrice;
     }
     public double getPrice() {
